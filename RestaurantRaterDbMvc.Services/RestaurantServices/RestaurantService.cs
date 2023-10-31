@@ -6,6 +6,7 @@ using RestaurantRaterDbMvc.Data;
 using RestaurantRaterDbMvc.Data.Entities;
 using RestaurantRaterDbMvc.Models.RestaurantModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RestaurantRaterDbMvc.Services.RestaurantServices;
 
@@ -48,9 +49,19 @@ public class RestaurantService : IRestaurantService
         return restaurants;
     }
 
-    public Task<RestaurantDetail> GetRestaurantByIdAsync(int id)
+    public async Task<RestaurantDetail?> GetRestaurantByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        Restaurant? restaurant = await _context.Restaurants
+            .Include(r => r.Ratings)
+            .FirstOrDefaultAsync(r => r.Id == id);
+
+        return restaurant is null ? null : new RestaurantDetail()
+        {
+            Id = restaurant.Id, 
+            Name = restaurant.Name,
+            Location = restaurant.Location,
+            Score = restaurant.Score
+        };
     }
 
     public Task<bool> UpdateRestaurantAsync(RestaurantUpdate model)

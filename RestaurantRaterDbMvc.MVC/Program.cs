@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RestaurantRaterDbMvc.Data;
+using RestaurantRaterDbMvc.Services.RestaurantServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,7 @@ builder.Services.AddDbContext<RestaurantDbContext>(options => options.UseSqlServ
     builder.Configuration.GetConnectionString("DefaultConnection")
 ));
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 
 var app = builder.Build();
 
