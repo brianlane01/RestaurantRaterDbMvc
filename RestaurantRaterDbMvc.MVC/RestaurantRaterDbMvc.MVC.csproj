@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestaurantRaterDbMvc.Data\RestaurantRaterDbMvc.Data.csproj" />
+    <ProjectReference Include="..\RestaurantRaterDbMvc.Models\RestaurantRaterDbMvc.Models.csproj" />
+    <ProjectReference Include="..\RestaurantRaterDbMvc.Services\RestaurantRaterDbMvc.Services.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
