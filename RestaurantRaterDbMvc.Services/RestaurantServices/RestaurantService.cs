@@ -30,9 +30,15 @@ public class RestaurantService : IRestaurantService
         return await _context.SaveChangesAsync() == 1;
     }
 
-    public Task<bool> DeleteRestaurantAsync(int id)
+    public async Task<bool> DeleteRestaurantAsync(int id)
     {
-        throw new NotImplementedException();
+        var restaurant = await _context.Restaurants.FindAsync(id);
+        
+        if (restaurant == null)
+            return false;
+
+        _context.Restaurants.Remove(restaurant);
+        return await _context.SaveChangesAsync() == 1;
     }
 
     public async Task<List<RestaurantListItem>> GetAllRestaurantsAsync()
@@ -64,9 +70,19 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public Task<bool> UpdateRestaurantAsync(RestaurantUpdate model)
+    public async Task<bool> UpdateRestaurantAsync(RestaurantUpdate model)
     {
-        throw new NotImplementedException();
+        Restaurant restaurant = await _context.Restaurants.FindAsync(model.Id);
+        
+        if(restaurant == null)
+            return false;
+
+        restaurant.Name = model.Name;
+        restaurant.Location = model.Location;
+
+        int numberOfChanges = await _context.SaveChangesAsync();
+
+        return numberOfChanges == 1;
     }
 
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Core;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using RestaurantRaterDbMvc.Models.RestaurantModels;
 using RestaurantRaterDbMvc.Services.RestaurantServices;
@@ -38,13 +39,50 @@ public class RestaurantController : Controller
             return RedirectToAction(nameof(Index));
 
         return View(restaurant);
-    
 
-    }
+    } 
 
     public async Task<IActionResult> Create()
     {
         return View();
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        if(!ModelState.IsValid)
+            return View();
+
+        var restaurant = await _service.GetRestaurantByIdAsync(id);
+
+        if (restaurant == null)
+            return RedirectToAction(nameof(Index));
+
+        var restaurantEdit = new RestaurantUpdate()
+        {
+            Id = restaurant.Id,
+            Name = restaurant.Name,
+            Location = restaurant.Location
+        };
+        
+        return View(restaurantEdit);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(RestaurantUpdate model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(ModelState);
+        }
+
+        var restaurant = await _service.UpdateRestaurantAsync(model);
+
+        if (!restaurant)
+            return RedirectToAction(nameof(Index));
+
+        return RedirectToAction("Details", new { id = model.Id });
+        // return RedirectToAction("Details");
+
     }
 
     [HttpPost]
@@ -57,5 +95,32 @@ public class RestaurantController : Controller
         await _service.CreateRestaurantAsync(model);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        if(!ModelState.IsValid)
+            return View();
+
+        var restaurant = await _service.GetRestaurantByIdAsync(id);
+
+        if (restaurant == null)
+            return RedirectToAction(nameof(Index));
+
+        return View(restaurant);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(RestaurantDetail model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(ModelState);
+        }
+
+        await _service.DeleteRestaurantAsync(model.Id);
+
+        return RedirectToAction(nameof(Index));
+
     }
 }
