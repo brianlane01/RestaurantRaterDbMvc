@@ -1,4 +1,4 @@
-namespace RestaurantRaterDbMvc.MVC.Models;
+namespace RestaurantRaterDbMvc.Models.ErrorModels;
 
 public class ErrorViewModel
 {
