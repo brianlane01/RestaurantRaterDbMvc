@@ -42,7 +42,7 @@ public class RestaurantController : Controller
 
     } 
 
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         return View();
     }

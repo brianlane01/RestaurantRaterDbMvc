@@ -55,6 +55,21 @@ public class RestaurantService : IRestaurantService
         return restaurants;
     }
 
+    public async Task<List<RestaurantDetail>> GetAllRestaurantsDetailAsync()
+    {
+        List<RestaurantDetail> restaurants = await _context.Restaurants
+            .Include(r => r.Ratings)
+            .Select(r => new RestaurantDetail()
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Location = r.Location,
+                Score = r.Score,
+            }).ToListAsync();
+
+        return restaurants;
+    }
+
     public async Task<RestaurantDetail?> GetRestaurantByIdAsync(int id)
     {
         Restaurant? restaurant = await _context.Restaurants

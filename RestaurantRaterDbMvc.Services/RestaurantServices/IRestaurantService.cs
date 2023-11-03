@@ -13,4 +13,5 @@ public interface IRestaurantService
     Task<RestaurantDetail> GetRestaurantByIdAsync(int id);
     Task<bool> UpdateRestaurantAsync(RestaurantUpdate model);
     Task<bool> DeleteRestaurantAsync(int id);
+    Task<List<RestaurantDetail>> GetAllRestaurantsDetailAsync();
 }
